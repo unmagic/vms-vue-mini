@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "lib": ["es2016"],
+    "module": "preserve",
+    "moduleResolution": "bundler",
+    "skipLibCheck": true,
+    "verbatimModuleSyntax": true,
+    "resolveJsonModule": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "declaration": true,
+    "isolatedDeclarations": true,
+    "types": ["vitest/globals"],
+    "paths": {
+      "@vms/vue-mini": ["./packages/core/src"]
+    }
+  },
+  "include": [
+    "packages/core",
+    "packages/api-typings",
+    "build.ts",
+    "release.ts",
+    "global.d.ts",
+    "vitest.setup.ts",
+    "vitest.config.ts"
+  ]
+}

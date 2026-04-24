@@ -1,0 +1,22 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "singleQuote": true,
+  "tabWidth": 2,
+  "semi": false,
+  "printWidth": 100,
+  "trailingComma": "all",
+  "jsxSingleQuote": true,
+  "sortPackageJson": false,
+  "ignorePatterns": [
+    "packages/api-typings/",
+    "**/cache/",
+    "**/dist/",
+    "node_modules/**",
+    "cache/**",
+    ".idea/**",
+    ".vscode/**",
+    ".git/**",
+    ".DS_Store",
+    "pnpm-lock.yaml"
+  ]
+}

@@ -1,0 +1,118 @@
+/// <reference types="miniprogram-api-typings" preserve="true" />
+
+// Core API ------------------------------------------------------------------
+
+export {
+  // Core
+  computed,
+  reactive,
+  ref,
+  readonly,
+  // Utilities
+  unref,
+  proxyRefs,
+  isRef,
+  toRef,
+  toValue,
+  toRefs,
+  isProxy,
+  isReactive,
+  isReadonly,
+  isShallow,
+  // Advanced
+  customRef,
+  triggerRef,
+  shallowRef,
+  shallowReactive,
+  shallowReadonly,
+  markRaw,
+  toRaw,
+  // Effect
+  effect,
+  stop,
+  getCurrentWatcher,
+  onWatcherCleanup,
+  ReactiveEffect,
+  // Effect scope
+  effectScope,
+  EffectScope,
+  getCurrentScope,
+  onScopeDispose,
+} from '@vue/reactivity'
+export { watch, watchEffect, watchPostEffect, watchSyncEffect } from './watch'
+export { nextTick } from './scheduler'
+export { provide, inject } from './inject'
+export { createApp } from './app'
+export { defineComponent } from './component'
+export {
+  onAppShow,
+  onAppHide,
+  onAppError,
+  onPageNotFound,
+  onUnhandledRejection,
+  onThemeChange,
+  onShow,
+  onHide,
+  onUnload,
+  onRouteDone,
+  onPullDownRefresh,
+  onReachBottom,
+  onResize,
+  onTabItemTap,
+  onPageScroll,
+  onShareAppMessage,
+  onShareTimeline,
+  onAddToFavorites,
+  onSaveExitState,
+  onReady,
+  onLoad,
+  onMove,
+  onDetach,
+  onError,
+} from './lifecycle'
+
+// Types -----------------------------------------------------------------------
+
+export { TrackOpTypes, TriggerOpTypes } from '@vue/reactivity'
+export type {
+  Ref,
+  MaybeRef,
+  MaybeRefOrGetter,
+  ToRef,
+  ToRefs,
+  UnwrapRef,
+  ShallowRef,
+  ShallowUnwrapRef,
+  CustomRefFactory,
+  ReactiveFlags,
+  DeepReadonly,
+  ShallowReactive,
+  UnwrapNestedRefs,
+  ComputedRef,
+  WritableComputedRef,
+  WritableComputedOptions,
+  ComputedGetter,
+  ComputedSetter,
+  ReactiveEffectRunner,
+  ReactiveEffectOptions,
+  EffectScheduler,
+  DebuggerOptions,
+  DebuggerEvent,
+  DebuggerEventExtraInfo,
+  Raw,
+  Reactive,
+} from '@vue/reactivity'
+export type {
+  MultiWatchSources,
+  WatchEffect,
+  WatchOptions,
+  WatchEffectOptions as WatchOptionsBase,
+  WatchCallback,
+  WatchSource,
+  WatchHandle,
+  WatchStopHandle,
+} from './watch'
+export type { InjectionKey } from './inject'
+export type { Bindings } from './instance'
+export type { AppSetup, AppOptions } from './app'
+export type { ComponentContext, ComponentSetup, ComponentOptions } from './component'
