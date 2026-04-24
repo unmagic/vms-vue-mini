@@ -8,7 +8,7 @@ const config: ViteUserConfig = defineConfig({
   },
   resolve: {
     alias: {
-      '@vms/vue-mini': fileURLToPath(new URL('packages/core/src', import.meta.url)),
+      '@unmagic/vue-mini': fileURLToPath(new URL('packages/core/src', import.meta.url)),
     },
   },
   test: {

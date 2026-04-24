@@ -13,7 +13,7 @@ VMS Vue Mini 是一个基于 [Vue Mini](https://github.com/vue-mini/vue-mini) �
 ## 开始
 
 ```bash
-npm install @vms/vue-mini
+npm install @unmagic/vue-mini
 ```
 
 ## 许可证

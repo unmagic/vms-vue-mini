@@ -14,7 +14,7 @@
     "isolatedDeclarations": true,
     "types": ["vitest/globals"],
     "paths": {
-      "@vms/vue-mini": ["./packages/core/src"]
+      "@unmagic/vue-mini": ["./packages/core/src"]
     }
   },
   "include": [
