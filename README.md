@@ -70,6 +70,7 @@ const msg = ref('Hello Vue Mini')
 ## 相关项目
 
 - [VMS](https://github.com/unmagic/vms) - Vue Mini SFC 编译器，将 Vue 单文件组件编译为微信小程序代码
+- [Vue Mini](https://github.com/vue-mini/vue-mini) - 原版的 Vue 3 小程序框架
 
 ## 许可证
 
