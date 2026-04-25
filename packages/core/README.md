@@ -7,6 +7,7 @@
 `@unmagic/vue-mini` 是一个专为微信小程序设计的轻量级框架，基于 Vue 3 的 `@vue/reactivity` 响应式系统构建。它是 [Vue Mini](https://github.com/vue-mini/vue-mini) 的一个衍生版本，专门针对 [VMS](https://github.com/unmagic/vms) (Vue Mini SFC) 编译器进行了特殊优化：
 
 - 移除了 `page` 相关的 API（VMS 中所有页面和组件均通过 `defineComponent` 定义）
+- 在setup期间，将return的函数额外绑定给了data，以方便传递给自定义组件的函数参数。
 - 精简了运行时体积，专注于组件级开发
 - 保留了完整的 Vue 3 Composition API 体验
 
