@@ -1,6 +1,6 @@
 {
   "name": "@unmagic/vue-mini",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "基于 Vue 3 的小程序框架。简单，强大，高性能。 ",
   "main": "dist/vue-mini.cjs.js",
   "module": "dist/vue-mini.esm-bundler.js",
@@ -32,7 +32,7 @@
     "小程序"
   ],
   "dependencies": {
-    "@vue/reactivity": "3.5.32",
-    "miniprogram-api-typings": "~4.0.8"
+    "@vue/reactivity": "3.5.33",
+    "miniprogram-api-typings": "~5.1.3"
   }
 }

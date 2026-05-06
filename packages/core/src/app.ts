@@ -2,10 +2,7 @@ import type { Bindings, AppInstance } from './instance'
 import { setCurrentApp, unsetCurrentApp } from './instance'
 import { exclude, isFunction, toHiddenField } from './utils'
 
-export type AppSetup = (
-  this: void,
-  options: WechatMiniprogram.App.LaunchShowOption,
-) => Bindings
+export type AppSetup = (this: void, options: WechatMiniprogram.App.LaunchShowOption) => Bindings
 export type AppOptions<T extends WechatMiniprogram.IAnyObject> = {
   setup?: AppSetup
 } & WechatMiniprogram.App.Options<T>
@@ -23,9 +20,7 @@ export enum AppLifecycle {
 
 export function createApp(setup: AppSetup): void
 
-export function createApp<T extends WechatMiniprogram.IAnyObject>(
-  options: AppOptions<T>,
-): void
+export function createApp<T extends WechatMiniprogram.IAnyObject>(options: AppOptions<T>): void
 
 export function createApp(optionsOrSetup: any): void {
   let setup: AppSetup
@@ -50,13 +45,13 @@ export function createApp(optionsOrSetup: any): void {
   ) {
     setCurrentApp(this)
     const bindings = setup(options)
-    if (bindings !== undefined) {
+    unsetCurrentApp()
+
+    if (typeof bindings !== 'undefined') {
       Object.keys(bindings).forEach((key) => {
         this[key] = bindings[key]
       })
     }
-
-    unsetCurrentApp()
 
     if (originOnLaunch !== undefined) {
       originOnLaunch.call(this, options)
@@ -65,30 +60,18 @@ export function createApp(optionsOrSetup: any): void {
 
   options[AppLifecycle.ON_SHOW] = createLifecycle(options, AppLifecycle.ON_SHOW)
   options[AppLifecycle.ON_HIDE] = createLifecycle(options, AppLifecycle.ON_HIDE)
-  options[AppLifecycle.ON_ERROR] = createLifecycle(
-    options,
-    AppLifecycle.ON_ERROR,
-  )
-  options[AppLifecycle.ON_PAGE_NOT_FOUND] = createLifecycle(
-    options,
-    AppLifecycle.ON_PAGE_NOT_FOUND,
-  )
+  options[AppLifecycle.ON_ERROR] = createLifecycle(options, AppLifecycle.ON_ERROR)
+  options[AppLifecycle.ON_PAGE_NOT_FOUND] = createLifecycle(options, AppLifecycle.ON_PAGE_NOT_FOUND)
   options[AppLifecycle.ON_UNHANDLED_REJECTION] = createLifecycle(
     options,
     AppLifecycle.ON_UNHANDLED_REJECTION,
   )
-  options[AppLifecycle.ON_THEME_CHANGE] = createLifecycle(
-    options,
-    AppLifecycle.ON_THEME_CHANGE,
-  )
+  options[AppLifecycle.ON_THEME_CHANGE] = createLifecycle(options, AppLifecycle.ON_THEME_CHANGE)
 
   App(options)
 }
 
-function createLifecycle(
-  options: Options,
-  lifecycle: AppLifecycle,
-): (...args: any[]) => void {
+function createLifecycle(options: Options, lifecycle: AppLifecycle): (...args: any[]) => void {
   const originLifecycle = options[lifecycle] as Function
   return function (this: AppInstance, ...args: any[]) {
     const hooks = this[toHiddenField(lifecycle)]
