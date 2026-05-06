@@ -12,32 +12,23 @@ const pageHookWarn =
 export const onAppShow: (
   hook: (options: WechatMiniprogram.App.LaunchShowOption) => unknown,
 ) => void = createAppHook(AppLifecycle.ON_SHOW)
-export const onAppHide: (hook: () => unknown) => void = createAppHook(
-  AppLifecycle.ON_HIDE,
+export const onAppHide: (hook: () => unknown) => void = createAppHook(AppLifecycle.ON_HIDE)
+export const onAppError: (hook: (error: string) => unknown) => void = createAppHook(
+  AppLifecycle.ON_ERROR,
 )
-export const onAppError: (hook: (error: string) => unknown) => void =
-  createAppHook(AppLifecycle.ON_ERROR)
 export const onPageNotFound: (
   hook: (options: WechatMiniprogram.App.PageNotFoundOption) => unknown,
 ) => void = createAppHook(AppLifecycle.ON_PAGE_NOT_FOUND)
 export const onUnhandledRejection: (
-  hook: (
-    options: WechatMiniprogram.OnUnhandledRejectionListenerResult,
-  ) => unknown,
+  hook: (options: WechatMiniprogram.OnUnhandledRejectionListenerResult) => unknown,
 ) => void = createAppHook(AppLifecycle.ON_UNHANDLED_REJECTION)
 export const onThemeChange: (
   hook: (options: WechatMiniprogram.OnThemeChangeListenerResult) => unknown,
 ) => void = createAppHook(AppLifecycle.ON_THEME_CHANGE)
 
-export const onShow: (hook: () => unknown) => void = createPageHook(
-  PageLifecycle.ON_SHOW,
-)
-export const onHide: (hook: () => unknown) => void = createPageHook(
-  PageLifecycle.ON_HIDE,
-)
-export const onUnload: (hook: () => unknown) => void = createPageHook(
-  PageLifecycle.ON_UNLOAD,
-)
+export const onShow: (hook: () => unknown) => void = createPageHook(PageLifecycle.ON_SHOW)
+export const onHide: (hook: () => unknown) => void = createPageHook(PageLifecycle.ON_HIDE)
+export const onUnload: (hook: () => unknown) => void = createPageHook(PageLifecycle.ON_UNLOAD)
 export const onRouteDone: (hook: () => unknown) => void = createPageHook(
   PageLifecycle.ON_ROUTE_DONE,
 )
@@ -47,9 +38,8 @@ export const onPullDownRefresh: (hook: () => unknown) => void = createPageHook(
 export const onReachBottom: (hook: () => unknown) => void = createPageHook(
   PageLifecycle.ON_REACH_BOTTOM,
 )
-export const onResize: (
-  hook: (resize: WechatMiniprogram.Page.IResizeOption) => unknown,
-) => void = createPageHook(PageLifecycle.ON_RESIZE)
+export const onResize: (hook: (resize: WechatMiniprogram.Page.IResizeOption) => unknown) => void =
+  createPageHook(PageLifecycle.ON_RESIZE)
 export const onTabItemTap: (
   hook: (tap: WechatMiniprogram.Page.ITabItemTapOption) => unknown,
 ) => void = createPageHook(PageLifecycle.ON_TAB_ITEM_TAP)
@@ -64,9 +54,7 @@ export const onPageScroll = (
     if (currentInstance.__listenPageScroll__) {
       injectHook(currentInstance, PageLifecycle.ON_PAGE_SCROLL, hook)
     } else if (__DEV__) {
-      console.warn(
-        'onPageScroll() hook only works when `listenPageScroll` is configured to true.',
-      )
+      console.warn('onPageScroll() hook only works when `listenPageScroll` is configured to true.')
     }
   } else if (__DEV__) {
     console.warn(pageHookWarn)
@@ -163,9 +151,7 @@ export const onAddToFavorites = (
   }
 }
 
-export const onSaveExitState = (
-  hook: () => WechatMiniprogram.Page.ISaveExitState,
-): void => {
+export const onSaveExitState = (hook: () => WechatMiniprogram.Page.ISaveExitState): void => {
   const currentInstance = getCurrentInstance()
   /* istanbul ignore else -- @preserve  */
   if (currentInstance) {
@@ -179,9 +165,7 @@ export const onSaveExitState = (
         console.warn('onSaveExitState() hook can only be called once.')
       }
     } else if (__DEV__) {
-      console.warn(
-        'onSaveExitState() hook only works when `onSaveExitState` option is not exist.',
-      )
+      console.warn('onSaveExitState() hook only works when `onSaveExitState` option is not exist.')
     }
   } else if (__DEV__) {
     console.warn(pageHookWarn)
@@ -200,17 +184,16 @@ export const onReady = (hook: () => unknown): void => {
   }
 }
 
-export const onLoad: (hook: (query: Query) => unknown) => void =
-  createComponentHook(PageLifecycle.ON_LOAD)
-export const onMove: (hook: () => unknown) => void = createComponentHook(
-  ComponentLifecycle.MOVED,
+export const onLoad: (hook: (query: Query) => unknown) => void = createComponentHook(
+  PageLifecycle.ON_LOAD,
 )
+export const onMove: (hook: () => unknown) => void = createComponentHook(ComponentLifecycle.MOVED)
 export const onDetach: (hook: () => unknown) => void = createComponentHook(
   ComponentLifecycle.DETACHED,
 )
-export const onError: (
-  hook: (error: WechatMiniprogram.Error) => unknown,
-) => void = createComponentHook(ComponentLifecycle.ERROR)
+export const onError: (hook: (error: string) => unknown) => void = createComponentHook(
+  ComponentLifecycle.ERROR,
+)
 
 function createAppHook(lifecycle: AppLifecycle) {
   return (hook: Function): void => {
@@ -237,9 +220,7 @@ function createPageHook(lifecycle: PageLifecycle) {
   }
 }
 
-function createComponentHook(
-  lifecycle: PageLifecycle.ON_LOAD | ComponentLifecycle,
-) {
+function createComponentHook(lifecycle: PageLifecycle.ON_LOAD | ComponentLifecycle) {
   return (hook: Function): void => {
     /* istanbul ignore else -- @preserve  */
     if (currentComponent) {
