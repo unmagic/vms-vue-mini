@@ -140,7 +140,54 @@ export function defineComponent(optionsOrSetup: any, config?: Config): string {
       getPageId: this.getPageId.bind(this),
       animate: this.animate.bind(this),
       clearAnimation: this.clearAnimation.bind(this),
-      getOpenerEventChannel: this.getOpenerEventChannel.bind(this),
+      getOpenerEventChannel: () => {
+        const channel = this.getOpenerEventChannel()
+        if (channel !== undefined) {
+          return channel
+        }
+        // Compatibility: In WeChat Work (企业微信), getOpenerEventChannel()
+        // may return undefined when called synchronously during the attached
+        // lifecycle. Return a lazy proxy that defers operations until the
+        // real EventChannel is available.
+        if (__DEV__) {
+          console.warn(
+            '[vue-mini] getOpenerEventChannel() returned undefined, ' +
+              'using deferred proxy for WeChat Work (企业微信) compatibility.',
+          )
+        }
+        let realChannel:
+          | WechatMiniprogram.EventChannel
+          | WechatMiniprogram.EmptyEventChannel
+          | null = null
+        const pendingOps: Array<{
+          method: keyof (WechatMiniprogram.EventChannel | WechatMiniprogram.EmptyEventChannel)
+          args: any[]
+        }> = []
+        setTimeout(() => {
+          realChannel = this.getOpenerEventChannel()
+          pendingOps.forEach(({ method, args }) => {
+            if (realChannel && typeof realChannel[method] === 'function') {
+              ;(realChannel[method] as (...a: any[]) => any)(...args)
+            }
+          })
+          pendingOps.length = 0
+        }, 0)
+        return new Proxy({} as WechatMiniprogram.EventChannel, {
+          get(_, prop) {
+            if (typeof prop !== 'string') return undefined
+            return (...args: any[]) => {
+              const key = prop as keyof (
+                | WechatMiniprogram.EventChannel
+                | WechatMiniprogram.EmptyEventChannel
+              )
+              if (realChannel && typeof realChannel[key] === 'function') {
+                return (realChannel[key] as (...a: any[]) => any)(...args)
+              }
+              pendingOps.push({ method: key, args })
+            }
+          },
+        })
+      },
       applyAnimatedStyle: this.applyAnimatedStyle && this.applyAnimatedStyle.bind(this),
       clearAnimatedStyle: this.clearAnimatedStyle && this.clearAnimatedStyle.bind(this),
       setUpdatePerformanceListener: this.setUpdatePerformanceListener.bind(this),
