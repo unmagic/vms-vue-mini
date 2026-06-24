@@ -79,9 +79,10 @@ export function definePage(optionsOrSetup: any, config?: Config): void {
 
   const originOnLoad = options[PageLifecycle.ON_LOAD]
   options[PageLifecycle.ON_LOAD] = function (this: PageInstance, query: Query) {
-    this.__scope__ = new EffectScope()
+    this.__v_scope = new EffectScope()
+    // @ts-expect-error
+    this.__v_scope.on()
 
-    setCurrentPage(this)
     const context: PageContext = {
       is: this.is,
       route: this.route,
@@ -108,8 +109,12 @@ export function definePage(optionsOrSetup: any, config?: Config): void {
       setInitialRenderingCache: this.setInitialRenderingCache.bind(this),
       getAppBar: this.getAppBar && this.getAppBar.bind(this),
     }
+
+    setCurrentPage(this)
     const bindings = setup(query, context)
-    if (bindings !== undefined) {
+    unsetCurrentPage()
+
+    if (typeof bindings !== 'undefined') {
       let data: Record<string, unknown> | undefined
       Object.keys(bindings).forEach((key) => {
         const value = bindings[key]
@@ -123,11 +128,13 @@ export function definePage(optionsOrSetup: any, config?: Config): void {
         deepWatch.call(this, key, value)
       })
       if (data !== undefined) {
+        // May call sub component's setup synchronously, so should call after unsetCurrentPage()
         this.setData(data, flushPostFlushCbs)
       }
     }
 
-    unsetCurrentPage()
+    // @ts-expect-error
+    this.__v_scope.off()
 
     if (originOnLoad !== undefined) {
       originOnLoad.call(this, query)
@@ -138,13 +145,13 @@ export function definePage(optionsOrSetup: any, config?: Config): void {
   options[PageLifecycle.ON_UNLOAD] = function (this: PageInstance) {
     onUnload.call(this)
 
-    this.__scope__.stop()
+    this.__v_scope.stop()
   }
 
   if (options[PageLifecycle.ON_PAGE_SCROLL] || config.listenPageScroll) {
     options[PageLifecycle.ON_PAGE_SCROLL] = createLifecycle(options, PageLifecycle.ON_PAGE_SCROLL)
     /* istanbul ignore next -- @preserve */
-    options.__listenPageScroll__ = () => true
+    options.__v_listenPageScroll = () => true
   }
 
   if (options[PageLifecycle.ON_SHARE_APP_MESSAGE] === undefined && config.canShareToOthers) {
@@ -163,7 +170,7 @@ export function definePage(optionsOrSetup: any, config?: Config): void {
     }
 
     /* istanbul ignore next -- @preserve */
-    options.__isInjectedShareToOthersHook__ = () => true
+    options.__v_isInjectedShareToOthersHook = () => true
   }
 
   if (options[PageLifecycle.ON_SHARE_TIMELINE] === undefined && config.canShareToTimeline) {
@@ -181,7 +188,7 @@ export function definePage(optionsOrSetup: any, config?: Config): void {
     }
 
     /* istanbul ignore next -- @preserve */
-    options.__isInjectedShareToTimelineHook__ = () => true
+    options.__v_isInjectedShareToTimelineHook = () => true
   }
 
   if (options[PageLifecycle.ON_ADD_TO_FAVORITES] === undefined) {
@@ -200,7 +207,7 @@ export function definePage(optionsOrSetup: any, config?: Config): void {
     }
 
     /* istanbul ignore next -- @preserve */
-    options.__isInjectedFavoritesHook__ = () => true
+    options.__v_isInjectedFavoritesHook = () => true
   }
 
   if (options[PageLifecycle.ON_SAVE_EXIT_STATE] === undefined) {
@@ -218,7 +225,7 @@ export function definePage(optionsOrSetup: any, config?: Config): void {
     }
 
     /* istanbul ignore next -- @preserve */
-    options.__isInjectedExitStateHook__ = () => true
+    options.__v_isInjectedExitStateHook = () => true
   }
 
   options[PageLifecycle.ON_SHOW] = createLifecycle(options, PageLifecycle.ON_SHOW)

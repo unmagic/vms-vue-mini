@@ -1,5 +1,6 @@
-export const EMPTY_OBJ: Readonly<Record<string, any>> =
-  __DEV__ ? Object.freeze({}) : /* istanbul ignore next -- @preserve */ {}
+export const EMPTY_OBJ: Readonly<Record<string, any>> = __DEV__
+  ? Object.freeze({})
+  : /* istanbul ignore next -- @preserve */ {}
 
 /* istanbul ignore next -- @preserve */
 export const NOOP = (): void => {}
@@ -43,5 +44,5 @@ export function isFunction(x: unknown): x is Function {
 }
 
 export function toHiddenField(name: string): string {
-  return `__${name}__`
+  return `__v_${name}`
 }

@@ -49,6 +49,6 @@ describe('instance', () => {
     expect(fn).toHaveBeenCalledTimes(0)
 
     component.pageLifetimes.show.call(component)
-    expect(fn).toHaveBeenCalledTimes(0)
+    expect(fn).toHaveBeenCalledTimes(1)
   })
 })

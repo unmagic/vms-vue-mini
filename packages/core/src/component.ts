@@ -107,9 +107,9 @@ export function defineComponent(optionsOrSetup: any, config?: Config): string {
   const originAttached =
     options.lifetimes[ComponentLifecycle.ATTACHED] || options[ComponentLifecycle.ATTACHED]
   options.lifetimes[ComponentLifecycle.ATTACHED] = function (this: ComponentInstance) {
-    this.__scope__ = new EffectScope()
+    this.__v_scope = new EffectScope()
     // @ts-expect-error
-    this.__scope__.on()
+    this.__v_scope.on()
 
     const rawProps: Record<string, any> = {}
     if (properties) {
@@ -118,7 +118,7 @@ export function defineComponent(optionsOrSetup: any, config?: Config): string {
       })
     }
 
-    this.__props__ = shallowReactive(rawProps)
+    this.__v_props = shallowReactive(rawProps)
 
     const context: ComponentContext = {
       is: this.is,
@@ -200,7 +200,7 @@ export function defineComponent(optionsOrSetup: any, config?: Config): string {
     setCurrentComponent(this)
     const bindings = setup(
       /* istanbul ignore next -- @preserve */
-      __DEV__ ? shallowReadonly(this.__props__) : this.__props__,
+      __DEV__ ? shallowReadonly(this.__v_props) : this.__v_props,
       context,
     )
     unsetCurrentComponent()
@@ -227,7 +227,7 @@ export function defineComponent(optionsOrSetup: any, config?: Config): string {
     }
 
     // @ts-expect-error
-    this.__scope__.off()
+    this.__v_scope.off()
 
     if (originAttached !== undefined) {
       originAttached.call(this)
@@ -238,7 +238,7 @@ export function defineComponent(optionsOrSetup: any, config?: Config): string {
   options.lifetimes[ComponentLifecycle.DETACHED] = function (this: ComponentInstance) {
     detached.call(this)
 
-    this.__scope__.stop()
+    this.__v_scope.stop()
   }
 
   const originReady =
@@ -266,7 +266,7 @@ export function defineComponent(optionsOrSetup: any, config?: Config): string {
       PageLifecycle.ON_PAGE_SCROLL,
     )
     /* istanbul ignore next -- @preserve */
-    options.methods.__listenPageScroll__ = () => true
+    options.methods.__v_listenPageScroll = () => true
   }
 
   if (
@@ -288,7 +288,7 @@ export function defineComponent(optionsOrSetup: any, config?: Config): string {
     }
 
     /* istanbul ignore next -- @preserve */
-    options.methods.__isInjectedShareToOthersHook__ = () => true
+    options.methods.__v_isInjectedShareToOthersHook = () => true
   }
 
   if (options.methods[PageLifecycle.ON_SHARE_TIMELINE] === undefined && config.canShareToTimeline) {
@@ -306,7 +306,7 @@ export function defineComponent(optionsOrSetup: any, config?: Config): string {
     }
 
     /* istanbul ignore next -- @preserve */
-    options.methods.__isInjectedShareToTimelineHook__ = () => true
+    options.methods.__v_isInjectedShareToTimelineHook = () => true
   }
 
   if (options.methods[PageLifecycle.ON_ADD_TO_FAVORITES] === undefined) {
@@ -325,7 +325,7 @@ export function defineComponent(optionsOrSetup: any, config?: Config): string {
     }
 
     /* istanbul ignore next -- @preserve */
-    options.methods.__isInjectedFavoritesHook__ = () => true
+    options.methods.__v_isInjectedFavoritesHook = () => true
   }
 
   if (options.methods[PageLifecycle.ON_SAVE_EXIT_STATE] === undefined) {
@@ -343,7 +343,7 @@ export function defineComponent(optionsOrSetup: any, config?: Config): string {
     }
 
     /* istanbul ignore next -- @preserve */
-    options.methods.__isInjectedExitStateHook__ = () => true
+    options.methods.__v_isInjectedExitStateHook = () => true
   }
 
   options.methods[PageLifecycle.ON_LOAD] = createPageLifecycle(options, PageLifecycle.ON_LOAD)
@@ -388,8 +388,8 @@ export function defineComponent(optionsOrSetup: any, config?: Config): string {
       const originObserver = options.observers[property]
       options.observers[property] = function (this: ComponentInstance, value: any) {
         // Observer executes before attached
-        if (this.__props__) {
-          this.__props__[property] = value
+        if (this.__v_props) {
+          this.__v_props[property] = value
         }
 
         if (originObserver !== undefined) {
@@ -434,8 +434,7 @@ function createLifecycle(
   const hiddenField = toHiddenField(lifecycle)
   return function (this: ComponentInstance, ...args: any[]) {
     const hooks = this[hiddenField]
-
-    if (Array.isArray(hooks)) {
+    if (hooks) {
       hooks.forEach((hook: Function) => hook(...args))
     }
 

@@ -294,6 +294,13 @@ describe('watch', () => {
     expect(called).toBe(true)
   })
 
+  it('watching empty multiple sources with immediate: true', () => {
+    const spy = vi.fn()
+    watch([], spy, { immediate: true })
+    expect(spy).toHaveBeenCalledTimes(1)
+    expect(spy).toHaveBeenCalledWith([], [], expect.any(Function))
+  })
+
   it('watching multiple sources: readonly array', async () => {
     const state = reactive({ count: 1 })
     const status = ref(false)
@@ -465,12 +472,7 @@ describe('watch', () => {
     watch(
       () => state,
       (state) => {
-        dummy = [
-          state.nested.count,
-          state.array[0],
-          state.map.get('a'),
-          state.set.has(1),
-        ]
+        dummy = [state.nested.count, state.array[0], state.map.get('a'), state.set.has(1)]
       },
       { deep: true },
     )

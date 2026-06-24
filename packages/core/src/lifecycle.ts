@@ -51,7 +51,7 @@ export const onPageScroll = (
   /* istanbul ignore else -- @preserve  */
   if (currentInstance) {
     /* istanbul ignore else -- @preserve   */
-    if (currentInstance.__listenPageScroll__) {
+    if (currentInstance.__v_listenPageScroll) {
       injectHook(currentInstance, PageLifecycle.ON_PAGE_SCROLL, hook)
     } else if (__DEV__) {
       console.warn('onPageScroll() hook only works when `listenPageScroll` is configured to true.')
@@ -77,7 +77,7 @@ export const onShareAppMessage = (
     /* istanbul ignore else -- @preserve  */
     if (
       currentInstance[PageLifecycle.ON_SHARE_APP_MESSAGE] &&
-      currentInstance.__isInjectedShareToOthersHook__
+      currentInstance.__v_isInjectedShareToOthersHook
     ) {
       const hiddenField = toHiddenField(PageLifecycle.ON_SHARE_APP_MESSAGE)
       /* istanbul ignore else -- @preserve  */
@@ -105,7 +105,7 @@ export const onShareTimeline = (
     /* istanbul ignore else -- @preserve  */
     if (
       currentInstance[PageLifecycle.ON_SHARE_TIMELINE] &&
-      currentInstance.__isInjectedShareToTimelineHook__
+      currentInstance.__v_isInjectedShareToTimelineHook
     ) {
       const hiddenField = toHiddenField(PageLifecycle.ON_SHARE_TIMELINE)
       /* istanbul ignore else -- @preserve  */
@@ -133,7 +133,7 @@ export const onAddToFavorites = (
   /* istanbul ignore else -- @preserve  */
   if (currentInstance) {
     /* istanbul ignore else -- @preserve  */
-    if (currentInstance.__isInjectedFavoritesHook__) {
+    if (currentInstance.__v_isInjectedFavoritesHook) {
       const hiddenField = toHiddenField(PageLifecycle.ON_ADD_TO_FAVORITES)
       /* istanbul ignore else -- @preserve  */
       if (currentInstance[hiddenField] === undefined) {
@@ -156,7 +156,7 @@ export const onSaveExitState = (hook: () => WechatMiniprogram.Page.ISaveExitStat
   /* istanbul ignore else -- @preserve  */
   if (currentInstance) {
     /* istanbul ignore else -- @preserve  */
-    if (currentInstance.__isInjectedExitStateHook__) {
+    if (currentInstance.__v_isInjectedExitStateHook) {
       const hiddenField = toHiddenField(PageLifecycle.ON_SAVE_EXIT_STATE)
       /* istanbul ignore else -- @preserve  */
       if (currentInstance[hiddenField] === undefined) {
@@ -240,16 +240,6 @@ function injectHook(
 ): void {
   const hiddenField = toHiddenField(lifecycle)
   if (currentInstance[hiddenField] === undefined) {
-    currentInstance[hiddenField] = []
-  } else if (typeof currentInstance[hiddenField] === 'function') {
-    if (__DEV__) {
-      console.log(
-        'currentInstance[hiddenField]',
-        currentInstance[hiddenField],
-        hiddenField,
-        currentInstance,
-      )
-    }
     currentInstance[hiddenField] = []
   }
 
