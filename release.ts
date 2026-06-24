@@ -13,4 +13,11 @@ await run('pnpm', ['test'])
 // @ts-expect-error
 await run('pnpm', ['build'])
 // @ts-expect-error
-await run('pnpm', ['-r', 'publish', '--access', 'public'])
+await run('pnpm', [
+  '-r',
+  'publish',
+  '--access',
+  'public',
+  '--registry',
+  'https://registry.npmjs.org',
+])
