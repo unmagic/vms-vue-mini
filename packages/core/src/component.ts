@@ -434,7 +434,8 @@ function createLifecycle(
   const hiddenField = toHiddenField(lifecycle)
   return function (this: ComponentInstance, ...args: any[]) {
     const hooks = this[hiddenField]
-    if (hooks) {
+
+    if (Array.isArray(hooks)) {
       hooks.forEach((hook: Function) => hook(...args))
     }
 

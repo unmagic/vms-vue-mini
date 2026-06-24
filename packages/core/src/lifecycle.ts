@@ -241,6 +241,16 @@ function injectHook(
   const hiddenField = toHiddenField(lifecycle)
   if (currentInstance[hiddenField] === undefined) {
     currentInstance[hiddenField] = []
+  } else if (typeof currentInstance[hiddenField] === 'function') {
+    if (__DEV__) {
+      console.log(
+        'currentInstance[hiddenField]',
+        currentInstance[hiddenField],
+        hiddenField,
+        currentInstance,
+      )
+    }
+    currentInstance[hiddenField] = []
   }
 
   currentInstance[hiddenField].push(hook)
